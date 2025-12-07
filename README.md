@@ -2,7 +2,7 @@
 
 **Stabilizing Retrieval-Augmented Translation via Lyapunov-Guided Control**
 
-PAEC is a control-theoretic framework for $k$-Nearest Neighbor Machine Translation ($k$NN-MT). It addresses the stochastic instability and high latency of traditional retrieval-augmented models by modeling the decoding process as a dynamical system stabilization problem.
+PAEC is a control-theoretic framework for $`k`$-Nearest Neighbor Machine Translation ($`k`$NN-MT). It addresses the stochastic instability and high latency of traditional retrieval-augmented models by modeling the decoding process as a dynamical system stabilization problem.
 
 By optimizing for **Control Lyapunov Function (CLF)** conditions, the PAEC system learns a policy that provably constrains error propagation while adhering to strict production resource constraints (Latency, Memory, Throughput).
 
@@ -10,9 +10,9 @@ By optimizing for **Control Lyapunov Function (CLF)** conditions, the PAEC syste
 
 * **Production-Aware Simulation:** A rigorous simulator that mimics real-world traffic patterns (Gamma distribution loads, diurnal cycles) to train robust control policies.
 
-* **Lyapunov-Guided Control:** Uses a trained Dynamics Model ($T_{\theta}$) to predict state evolution and minimize translation error energy ($V(\mathcal{E})$).
+* **Lyapunov-Guided Control:** Uses a trained Dynamics Model ($`T_{\theta}`$) to predict state evolution and minimize translation error energy ($`V\left(\mathcal{E}\right)`$).
 
-* **Teacher-Student Distillation:** Distills the expensive Online Planner ($\sim 27s$/sentence) into a lightweight Offline Policy Network ($\sim 1.9s$/sentence), achieving a $93%$ latency reduction.
+* **Teacher-Student Distillation:** Distills the expensive Online Planner ($`\sim 27`$s/sentence) into a lightweight Offline Policy Network ($`\sim 1.9`$s/sentence), achieving a **$`\mathbf{93\%}`$ latency reduction**.
 
 * **S8 Validation Suite:** A comprehensive theoretical validation suite ensuring Lipschitz continuity and Lyapunov stability.
 
@@ -78,7 +78,7 @@ Run the heuristic policies in the simulator to generate trajectory data for the 
 python scripts/01_generate_training_data.py #  --debug
 ```
 
-### **4. Train Dynamics Model ($\boldsymbol{T_{\theta}}$)**
+### **4. Train Dynamics Model ($`\boldsymbol{T_{\theta}}`$)**
 
 Train the Transformer-based Dynamics Model using the "Champion" configuration. This includes Curriculum Learning, N-step CLF loss, and S8 validation.
 
@@ -109,7 +109,7 @@ python scripts/t_train_Transformer.py \
     --save_dir ./models/dynamics_model/Champion
 ```
 
-### **5. Train Policy Network ($\boldsymbol{\pi_{\phi}}$)**
+### **5. Train Policy Network ($`\boldsymbol{\pi_{\phi}}`$)**
 
 Distill the optimal control signals from the Dynamics Model (Teacher) into the Student Policy Network.
 
@@ -127,7 +127,7 @@ python scripts/05_train_policy_network.py \
 
 ### **6. Validation & Evaluation**
 
-Evaluate the system using the trained Offline Policy against baselines (Vanilla/Adaptive kNN-MT).
+Evaluate the system using the trained Offline Policy against baselines (Vanilla/Adaptive $`k`$NN-MT).
 
 ```bash
 # Example
@@ -143,7 +143,7 @@ python scripts/paec_mt_validation.py \
 
 * `src/core`: Core data structures (State vectors: Error, Pressure, Context).
 * `src/simulation`: Production constraint simulator and heuristic policies.
-* `src/system`: kNN-MT system logic and beam search decoding.
+* `src/system`: $`k`$NN-MT system logic and beam search decoding.
 * `scripts`: Training, data generation, and analysis scripts.
 
 ## **Citation**
@@ -152,7 +152,7 @@ If you use PAEC in your research, please cite our paper:
 
 ```latex
 @article{paec2026,
-    title={PAEC kNN-MT: Stabilizing Retrieval-Augmented Translation via Lyapunov-Guided Control},
+    title={PAEC $`k`$NN-MT: Stabilizing Retrieval-Augmented Translation via Lyapunov-Guided Control},
     author={Zixiang Xu},
     journal={ACL},
     year={2026}
