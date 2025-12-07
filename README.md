@@ -12,7 +12,7 @@ By optimizing for **Control Lyapunov Function (CLF)** conditions, the PAEC syste
 
 * **Lyapunov-Guided Control:** Uses a trained Dynamics Model ($T_{\theta}$) to predict state evolution and minimize translation error energy ($V\left(\mathcal{E}\right)$).
 
-* **Teacher-Student Distillation:** Distills the expensive Online Planner ($\sim 27s$/sentence) into a lightweight Offline Policy Network ($\sim 1.9s$/sentence), achieving a **$\boldsymbol{93\%}$ latency reduction**.
+* **Teacher-Student Distillation:** Distills the expensive Online Planner ($\sim 27s$/sentence) into a lightweight Offline Policy Network ($\sim 1.9s$/sentence), achieving a $93\%$ latency reduction.
 
 * **S8 Validation Suite:** A comprehensive theoretical validation suite ensuring Lipschitz continuity and Lyapunov stability.
 
@@ -172,3 +172,4 @@ This project builds upon the following open-source libraries:
 ## **License**
 
 This project is licensed under the MIT License. See the LICENSE file for details.
+
