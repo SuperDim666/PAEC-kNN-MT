@@ -1449,7 +1449,7 @@ class kNNMTSystem:
             
             self.confidence_history.append(current_confidence)
             if len(self.confidence_history) > 1:
-                volatility = np.std(self.confidence_history)
+                volatility = np.sqrt(np.var(self.confidence_history) + 1e-6)
         except Exception as e:
             if self.is_debug: print(f"[Warning] Volatility calculation failed: {e}")
 

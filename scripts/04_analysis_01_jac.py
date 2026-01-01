@@ -99,15 +99,13 @@ def analyze_jacobian_results():
 
             if not jacobian_stats: continue
             
-            # Extract key metrics: Mean norm, Standard Deviation, Max norm, 
-            # 99th Percentile, and Convergence rate of the power iteration.
+            # Extract key metrics: Mean norm, Standard Deviation, Max norm, 99th Percentile.
             results_data.append({
                 "Experiment": name,
                 "Mean": jacobian_stats.get("mean"),
                 "Std": jacobian_stats.get("std"),
                 "Max": jacobian_stats.get("max"),
-                "P99": jacobian_stats.get("percentile_99"),
-                "Converged": jacobian_stats.get("converged_rate"),
+                "P99": jacobian_stats.get("percentile_99")
             })
 
         except (json.JSONDecodeError, KeyError): continue
@@ -126,8 +124,6 @@ def analyze_jacobian_results():
 
     print("\n--- Jacobian Spectral Norm Summary ---")
     print(df)
-    print("\nNote: 'Mean' is the value to replace the placeholder (~3.5) in Chapter 4.")
-    print("      'P99' (99th percentile) provides a practical upper bound on the Lipschitz constant.")
 
 if __name__ == "__main__":
     analyze_jacobian_results()

@@ -189,13 +189,8 @@ def analyze_hessian(args):
     # Output summary report.
     print("\n--- Hessian Convexity Analysis Summary ---")
     print(f"Total Samples Analyzed: {total_samples}")
-    print("\n[To replace '87%' in Chapter 4]")
     print(f"Overall Positive Definite Ratio (λ_min > 0): {positive_definite_ratio:.4f} ({positive_definite_count}/{total_samples})")
-    
-    print("\n[To replace '0.15' in Chapter 4]")
     print(f"Average Minimum Eigenvalue (E[λ_min]): {avg_min_eigenvalue:.4f}")
-    
-    print("\n[To replace '95%' in Chapter 4]")
     print(f"Positive Definite Ratio in High-Error Region (||E|| > 0.5): {high_error_pd_ratio:.4f} ({high_error_pd_count}/{high_error_samples})")
     
     # Save detailed CSV for further plotting or verification.

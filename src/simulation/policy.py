@@ -408,7 +408,7 @@ class Policy_Resource_Guardian(BasePolicy):
         Computes action by aggressively minimizing resource usage.
         """
         latency, memory, throughput = pressure_state
-        semantic, coverage, repetition, surprisal = error_state
+        semantic, coverage, surprisal, repetition = error_state
         focus, consistency, stability, volatility = context_state
 
         # --- Stage 1: Mandatory Pressure Check (P >> E > H) ---

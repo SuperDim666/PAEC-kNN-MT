@@ -182,13 +182,16 @@ def plot_trajectory_with_fill(ax, sample_data, sample_id, show_ylabel=False):
     x_axis = df_adapt['step']
 
     # 1. Plot Pure NMT (Baseline) as a faint background reference.
+    line_pure = None
     if not df_pure.empty:
-        ax.plot(df_pure['step'], df_pure['v_error'], color='gray', alpha=0.3, linewidth=1, linestyle=':')
+        line_pure, = ax.plot(df_pure['step'], df_pure['v_error'], 
+                             color='#56B4E9', alpha=0.6, linewidth=1.5, linestyle=':',
+                             label='Pure NMT')
 
     # 2. Plot Adaptive kNN-MT (Red, Dashed) to represent baseline divergence risk.
     line_adapt, = ax.plot(x_axis, df_adapt['v_error'],
                          color='#d62728', linestyle='--', linewidth=2,
-                         label='Adaptive (Baseline)')
+                         label='Adaptive $k$NN-MT')
 
     # 3. Plot PAEC Offline (Green, Solid) to represent controlled stability.
     line_paec, = ax.plot(x_axis, df_paec['v_error'],
@@ -207,7 +210,7 @@ def plot_trajectory_with_fill(ax, sample_data, sample_id, show_ylabel=False):
     end_v_paec = y2[-1]
 
     if abs(end_v_adapt - end_v_paec) > 0.1:
-        ax.annotate(f'ΔV={end_v_adapt - end_v_paec:.2f}',
+        ax.annotate(f'{r"$\Delta V$"}={end_v_adapt - end_v_paec:.2f}',
                    xy=(end_step, (end_v_adapt + end_v_paec)/2),
                    xytext=(10, 0), textcoords='offset points',
                    arrowprops=dict(arrowstyle='-|>', color='black', lw=0.8),
@@ -217,13 +220,19 @@ def plot_trajectory_with_fill(ax, sample_data, sample_id, show_ylabel=False):
     ax.set_title(f'Sample {sample_id}', fontsize=11, pad=5)
     ax.set_xlabel('Decoding Step', fontsize=10)
     if show_ylabel:
-        ax.set_ylabel(r'Error Energy $V(\mathcal{E}_t)$', fontsize=10)
+        ax.set_ylabel(r'Error Energy $V\left(\mathcal{E}_t\right)$', fontsize=10)
 
     # Add a "Danger Zone" background (V > 0.8) to indicate instability.
     max_v = max(df_adapt['v_error'].max(), df_paec['v_error'].max())
     ax.axhspan(0.8, max(1.5, max_v + 0.1), color='red', alpha=0.03, zorder=0)
 
-    return [line_adapt, line_paec]
+    # Return ALL handles
+    handles = []
+    if line_pure: handles.append(line_pure)
+    handles.append(line_adapt)
+    handles.append(line_paec)
+    
+    return handles
 
 # --- Statistical Analysis ---
 
@@ -464,17 +473,23 @@ def main():
         # Also save an individual high-res plot for Sample 762 if processed.
         if sample_id == 762:
             fig_single, ax_single = plt.subplots(figsize=(8, 5))
-            plot_trajectory_with_fill(ax_single, sample_data, sample_id, show_ylabel=True)
-            ax_single.legend(['Adaptive', 'PAEC Offline'], loc='upper left')
+            single_handles = plot_trajectory_with_fill(ax_single, sample_data, sample_id, show_ylabel=True)
+            
+            # Explicitly pass handles to ensure correct mapping (Pure -> Adaptive -> PAEC)
+            ax_single.legend(handles=single_handles, loc='upper left', fontsize=10, frameon=True)
+            
             single_path = os.path.join(IMAGES_DIR, 'trajectory_achilles_sample_762.png')
             fig_single.savefig(single_path, dpi=300, bbox_inches='tight')
             print(f"[Info] Saved Specific Plot: {single_path}")
             plt.close(fig_single)
-
-    # Add shared legend to the grid plot.
-    fig.legend(handles, ['Adaptive kNN-MT', 'PAEC Offline'],
-              loc='lower center', bbox_to_anchor=(0.5, 0.02),
-              ncol=2, fontsize=11, frameon=True, shadow=True)
+    
+    if handles:
+        labels = [h.get_label() for h in handles]
+        fig.legend(
+            handles, labels,
+            loc='lower center', bbox_to_anchor=(0.5, 0.02),
+            ncol=3, fontsize=11, frameon=True, shadow=True
+        )
 
     plt.tight_layout()
     plt.subplots_adjust(bottom=0.12, top=0.90, wspace=0.2, hspace=0.35)

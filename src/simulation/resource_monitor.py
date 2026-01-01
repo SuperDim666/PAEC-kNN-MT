@@ -205,7 +205,7 @@ class RealtimeResourceMonitor:
         R_t = self.throughput_monitor.get_real_time_r()
 
         # Derivatives (Rate of Change)
-        L_dot_t = self.latency_history[-1] - self.latency_history[-2] if len(self.latency_history) >= 2 else 0.0
+        L_dot_t = abs(self.latency_history[-1] - self.latency_history[-2]) if len(self.latency_history) >= 2 else 0.0
         M_dot_t = self.memory_history[-1] - self.memory_history[-2] if len(self.memory_history) >= 2 else 0.0
 
         # --- Apply Theoretical Pressure Formulas ---
