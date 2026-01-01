@@ -219,7 +219,7 @@ def load_teacher_components(teacher_model_dir: str, use_last_ckpt: bool, device:
             'text_embedding_dim': final_text_embedding_dim,
             'use_decoder_hidden_state': teacher_config['use_decoder_hidden_state'],
             'decoder_hidden_state_dim': teacher_config['decoder_hidden_state_dim'],
-            'use_moe_heads': teacher_config['use_moe_heads'],
+            'use_separate_heads_eh': teacher_config['use_separate_heads_eh'],
             'use_multi_heads': teacher_config['use_multi_heads'],
             'use_spectral_norm': teacher_config['use_spectral_norm'],
             'nhead': teacher_config['nhead']

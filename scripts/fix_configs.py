@@ -64,8 +64,8 @@ def get_golden_config_defaults():
     model_group.add_argument("--history_len", type=int, default=4, help="Number of historical states to use as input for the sequence model.")
     model_group.add_argument("--predict_delta", action="store_true", help="Change the model to predict the state change (S_tp1 - S_t) instead of the full next state.")
     model_group.add_argument("--use_text_embeddings", action="store_true", help="Enhance model input with source and prefix text embeddings.")
-    model_group.add_argument("--use_moe_heads", action="store_true", help="Use separate Mixture-of-Experts heads for predicting E, Phi, and H vectors.")
-    model_group.add_argument("--use_multi_heads", action="store_true", help="Use Multi-Head transformer for predicting E, Phi, H vectors aligning with actions.")
+    model_group.add_argument("--use_separate_heads_eh", action="store_true", help="Use separate heads for predicting E, (Phi), and H vectors.")
+    model_group.add_argument("--use_multi_heads", action="store_true", help="Use Multi-Head transformer for predicting E, (Phi), H vectors aligning with actions.")
     
     # Decoder hidden state integration settings.
     decoder_hidden_state_group = parser.add_argument_group("Hidden State of Decoder")

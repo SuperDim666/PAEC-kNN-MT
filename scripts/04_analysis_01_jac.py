@@ -53,7 +53,7 @@ EXPERIMENTS = [
     ("02_LearnP_Scheduler", "02_Accuracy/01_Learn_P_lr_Scheduler"),
     ("02_Text_Decoder", "02_Accuracy/02_TextEmb_DecoderState"),
     ("02_Uncertainty", "02_Accuracy/03_UncertaintyWeights"),
-    ("02_MOE", "02_Accuracy/04_MOE"),
+    ("02_SeparateHeadEH", "02_Accuracy/04_SeparateHeadEH"),
     ("02_Predict_Delta", "02_Accuracy/05_Predict_Delta"),
     ("02_MultiHead", "02_Accuracy/06_MultiHead"),
     # Milestone 3: Stability Constraints

@@ -1025,7 +1025,7 @@ class kNNMTSystem:
                 'text_embedding_dim': text_emb_dim_T,
                 'use_decoder_hidden_state': use_dec_hs_T,
                 'decoder_hidden_state_dim': dec_hs_dim_T,
-                'use_moe_heads': self.paec_config_dynamics.get('use_moe_heads', False),
+                'use_separate_heads_eh': self.paec_config_dynamics.get('use_separate_heads_eh', False),
                 'use_multi_heads': self.paec_config_dynamics.get('use_multi_heads', False),
                 'use_spectral_norm': self.paec_config_dynamics.get('use_spectral_norm', False),
                 'nhead': self.paec_config_dynamics.get('nhead', 4)

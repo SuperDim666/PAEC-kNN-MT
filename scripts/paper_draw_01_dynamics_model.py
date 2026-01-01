@@ -42,11 +42,11 @@ EXPERIMENTS = [
     ("01_SN_jac_1e-3", "01_Continuity/02_SN_1e-3"),
 
     # Milestone 2: Accuracy Improvements (Architecture & Training Dynamics)
-    # Includes learnable P matrix, text embeddings, uncertainty weights, MoE, delta prediction, etc.
+    # Includes learnable P matrix, text embeddings, uncertainty weights, separate heads for E and H, delta prediction, etc.
     ("02_LearnP_Scheduler", "02_Accuracy/01_Learn_P_lr_Scheduler"),
     ("02_Text_Decoder", "02_Accuracy/02_TextEmb_DecoderState"),
     ("02_Uncertainty", "02_Accuracy/03_UncertaintyWeights"),
-    ("02_MOE", "02_Accuracy/04_MOE"),
+    ("02_SeparateHeadEH", "02_Accuracy/04_SeparateHeadEH"),
     ("02_Predict_Delta", "02_Accuracy/05_Predict_Delta"),
     ("02_MultiHead", "02_Accuracy/06_MultiHead"),
 
@@ -147,7 +147,7 @@ def plot_milestone_2_accuracy(experiments_data, save_dir, data_save_dir):
     This visualizes the impact of various architectural improvements on prediction accuracy.
     """
     # Select experiments focused on accuracy improvements
-    exp_names = ["01_OnlySN", "02_LearnP_Scheduler", "02_Text_Decoder", "02_Uncertainty", "02_MOE", "02_Predict_Delta", "02_MultiHead"]
+    exp_names = ["01_OnlySN", "02_LearnP_Scheduler", "02_Text_Decoder", "02_Uncertainty", "02_SeparateHeadEH", "02_Predict_Delta", "02_MultiHead"]
     plot_data = []
     plt.figure(figsize=(14, 8))
     for exp_name in exp_names:

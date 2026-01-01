@@ -1381,7 +1381,7 @@ class PAECTransition(nn.Module):
         text_embedding_dim: int,
         use_decoder_hidden_state: bool,
         decoder_hidden_state_dim: int,
-        use_moe_heads: bool,
+        use_separate_heads_eh: bool,
         use_multi_heads: bool,
         use_spectral_norm: bool,
         nhead: int
@@ -1396,7 +1396,7 @@ class PAECTransition(nn.Module):
         self.text_embedding_dim = text_embedding_dim
         self.use_decoder_hidden_state = use_decoder_hidden_state
         self.decoder_hidden_state_dim = decoder_hidden_state_dim
-        self.use_moe_heads = use_moe_heads
+        self.use_separate_heads_eh = use_separate_heads_eh
         self.use_multi_heads = use_multi_heads
 
         # 1. Input Embedding Layers
@@ -1455,8 +1455,8 @@ class PAECTransition(nn.Module):
         if self.use_text_embeddings: out_head_in_dim += hid_dim
         if self.use_decoder_hidden_state: out_head_in_dim += hid_dim
 
-        # Support for Mixture-of-Experts (MoE) heads or a shared head.
-        if self.use_moe_heads:
+        # Support for Separate heads or a shared head.
+        if self.use_separate_heads:
             # Separate heads for Error (E) and Context (H) components
             self.out_head_E = NodeMLP(out_head_in_dim, hid_dim, E_INDEX[1] - E_INDEX[0] + 1, use_spectral_norm=use_spectral_norm)
             self.out_head_H = NodeMLP(out_head_in_dim, hid_dim, H_INDEX[1] - H_INDEX[0] + 1, use_spectral_norm=use_spectral_norm)
@@ -1607,7 +1607,7 @@ class PAECTransition(nn.Module):
         log_risk = self.risk_head(final_hidden_state).view(-1)
 
         # 5. Predict Next State Components (E and H)
-        if self.use_moe_heads:
+        if self.use_separate_heads:
             out_E = self.out_head_E(combined_features)
             out_H = self.out_head_H(combined_features)
         else:
@@ -1715,7 +1715,7 @@ class PAECTransition(nn.Module):
         # STAGE 2: OUTPUT PREDICTION (Heads)
         # ==============================================================================
 
-        if self.use_moe_heads:
+        if self.use_separate_heads:
             out_E = self.out_head_E(combined_features)
             out_H = self.out_head_H(combined_features)
         else:
@@ -3510,7 +3510,7 @@ def setup_data_and_model_components(args, rng):
         text_embedding_dim=(text_embedding_dim or 0),
         use_decoder_hidden_state=args.use_decoder_hidden_state,
         decoder_hidden_state_dim=args.decoder_hidden_state_dim,
-        use_moe_heads=args.use_moe_heads,
+        use_separate_heads_eh=args.use_separate_heads_eh,
         use_multi_heads=args.use_multi_heads,
         use_spectral_norm=args.use_spectral_norm,
         nhead=args.nhead
@@ -3702,8 +3702,8 @@ def main():
     model_group.add_argument("--history_len", type=int, default=4, help="Number of historical states to use as input for the sequence model.")
     model_group.add_argument("--predict_delta", action="store_true", help="Change the model to predict the state change (S_tp1 - S_t) instead of the full next state.")
     model_group.add_argument("--use_text_embeddings", action="store_true", help="Enhance model input with source and prefix text embeddings.")
-    model_group.add_argument("--use_moe_heads", action="store_true", help="Use separate Mixture-of-Experts heads for predicting E, Phi, and H vectors.")
-    model_group.add_argument("--use_multi_heads", action="store_true", help="Use Multi-Head transformer for predicting E, Phi, H vectors aligning with actions.")
+    model_group.add_argument("--use_separate_heads_eh", action="store_true", help="Use separate heads for predicting E, (Phi), and H vectors.")
+    model_group.add_argument("--use_multi_heads", action="store_true", help="Use Multi-Head transformer for predicting E, (Phi), H vectors aligning with actions.")
 
     decoder_hidden_state_group = parser.add_argument_group("Hidden State of Decoder")
     decoder_hidden_state_group.add_argument("--use_decoder_hidden_state", action="store_true", help="Enhance model input with the NMT decoder's hidden state from the previous step.")
@@ -4248,7 +4248,7 @@ def main():
                 text_embedding_dim=text_embedder.get_sentence_embedding_dimension(),
                 use_decoder_hidden_state=saved_config.use_decoder_hidden_state,
                 decoder_hidden_state_dim=saved_config.decoder_hidden_state_dim,
-                use_moe_heads=saved_config.use_moe_heads,
+                use_separate_heads_eh=saved_config.use_separate_heads_eh,
                 use_multi_heads=saved_config.use_multi_heads,
                 use_spectral_norm=saved_config.use_spectral_norm,
                 nhead=saved_config.nhead
